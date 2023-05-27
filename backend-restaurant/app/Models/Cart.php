@@ -9,10 +9,13 @@ class Cart extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function food()
     {
-        return $this->hasMany(Food::class);
+        return $this->belongsTo(Food::class);
     }
+
 
     public function costumer()
     {

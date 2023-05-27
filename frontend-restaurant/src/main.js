@@ -6,7 +6,6 @@ import App from "./App.vue";
  */
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
-import vueClickOutsideElement from "vue-click-outside-element";
 
 /**
  * Tailwind CSS
@@ -26,8 +25,6 @@ app.use(Toast);
 app.mixin(mixins);
 
 app.use(router);
-
-app.use(vueClickOutsideElement);
 
 app.use(store);
 

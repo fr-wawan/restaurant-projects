@@ -1,13 +1,17 @@
 <template>
-  <div>
+  <div class="sticky top-0 left-0">
     <header class="bg-white p-7">
       <nav class="flex justify-around items-center">
         <h1 class="text-center font-bold text-2xl">
           <span class="text-red-500">RESTA</span>URANT
         </h1>
         <ul class="flex gap-5 font-semibold">
-          <li>HOME</li>
-          <li>MENU</li>
+          <li>
+            <router-link :to="{ name: 'home.index' }">HOME</router-link>
+          </li>
+          <li>
+            <router-link :to="{ name: 'category.index' }">MENU</router-link>
+          </li>
           <li>ABOUT US</li>
           <li>CONTACT</li>
         </ul>
@@ -28,24 +32,26 @@
             <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
             <path d="M21 21l-6 -6"></path>
           </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-shopping-cart"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-            <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-            <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-            <path d="M17 17h-11v-14h-2"></path>
-            <path d="M6 5l14 1l-1 7h-13"></path>
-          </svg>
+          <router-link :to="{ name: 'cart' }">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-shopping-cart"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+              <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+              <path d="M17 17h-11v-14h-2"></path>
+              <path d="M6 5l14 1l-1 7h-13"></path>
+            </svg>
+          </router-link>
           <div class="flex items-center">
             <img
               :src="
@@ -78,10 +84,10 @@
             >
               <ul class="py-2 text-sm text-gray-700">
                 <li>
-                  <router-link
-                    :to="{ name: 'orders' }"
+                  <a
+                    @click="navigateHome"
                     class="block px-4 py-2 hover:bg-gray-200"
-                    >My Orders</router-link
+                    >My Orders</a
                   >
                 </li>
                 <li>
@@ -128,6 +134,10 @@ export default {
     const toast = useToast();
     const router = useRouter();
 
+    const navigateHome = () => {
+      router.push({ name: "home.index" });
+    };
+
     function toggleDropDown() {
       isDropDown.value = !isDropDown.value;
     }
@@ -155,6 +165,7 @@ export default {
       toggleDropDown,
       logout,
       profile,
+      navigateHome,
     };
   },
 };

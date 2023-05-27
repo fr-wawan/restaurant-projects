@@ -38,9 +38,41 @@ const routes = [
     },
   },
   {
+    path: "/food/:slug",
+    name: "food.index",
+    component: () => import("../views/food/Show.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+    props: true,
+  },
+  {
     path: "/profile/password",
     name: "profile.password",
     component: () => import("../views/profile/Password.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/category",
+    name: "category.index",
+    component: () => import("../views/category/Index.vue"),
+  },
+  {
+    path: "/category/:slug",
+    name: "category.show",
+    component: () => import("../views/category/Show.vue"),
+  },
+  {
+    path: "/",
+    name: "home.index",
+    component: () => import("../views/home/Index.vue"),
+  },
+  {
+    path: "/cart",
+    name: "cart",
+    component: () => import("../views/cart/Index.vue"),
     meta: {
       requiresAuth: true,
     },

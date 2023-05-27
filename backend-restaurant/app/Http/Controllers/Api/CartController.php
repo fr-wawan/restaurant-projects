@@ -11,11 +11,13 @@ class CartController extends Controller
 {
     public function index()
     {
-        $carts = Cart::with('food')->where('costumer_id', auth()->guard('api')->user->id)->latest()->paginate(5);
+        $carts = Cart::with('food')->where('costumer_id', auth()->guard('api')->user()->id)->get();
+
+
 
         return response()->json([
             'success' => true,
-            'message' => 'List Data Carts : ' . auth()->guard('api')->user()->name,
+            'message' => 'List Data Carts : ' . auth()->guard('api')->user()->id,
             'data' => $carts
         ], 200);
     }
@@ -24,10 +26,35 @@ class CartController extends Controller
     {
         $food = Food::where('id', $request->id)->first();
 
-        $cart = Cart::create([
-            'food_id' => $food->id,
-            'costumer_id' => auth()->guard('api')->user->id,
-            'quantity' => $request->quantity
-        ]);
+        $existingCart = Cart::where('food_id', $food->id)->where('costumer_id', auth()->guard('api')->user()->id)->first();
+
+        if ($existingCart) {
+            $existingCart->quantity += $request->quantity;
+            $existingCart->save();
+        } else {
+            $cart = Cart::create([
+                'food_id' => $food->id,
+                'costumer_id' => auth()->guard('api')->user()->id,
+                'quantity' => $request->quantity,
+            ]);
+        }
+    }
+
+    public function destroy($id)
+    {
+
+        $cart = Cart::findOrFail($id);
+
+        $cart->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data successfully deleted',
+            'data' => null
+        ], 200);
+    }
+
+    public function destroyAll()
+    {
     }
 }

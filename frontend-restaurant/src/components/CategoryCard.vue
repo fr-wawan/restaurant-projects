@@ -9,26 +9,18 @@
           :key="category.id"
           class="col-span-2 md:col-span-2 lg:col-span-1 bg-white rounded-md shadow-md p-4 text-center text-xs"
         >
-          <a href="#">
-            <div>
-              <img :src="category.image" width="40" class="inline-block mb-2" />
-            </div>
-            {{ category.name.toUpperCase() }}
-          </a>
-        </div>
-        <div
-          class="col-span-2 md:col-span-1 lg:col-span-1 bg-white rounded-md shadow-md p-4 text-center text-xs"
-        >
-          <a href="#">
+          <router-link
+            :to="{ name: 'category.show', params: { slug: category.slug } }"
+            class="font-bold text-md"
+          >
             <div>
               <img
-                src="../assets/images/menu.png"
-                width="40"
-                class="inline-block mb-2"
+                :src="`//localhost:8000${category.image}`"
+                class="inline-block rounded-lg mb-2"
               />
             </div>
-            LAINNYA
-          </a>
+            {{ category.name.toUpperCase() }}
+          </router-link>
         </div>
       </div>
     </div>
@@ -58,6 +50,7 @@ import { ContentLoader } from "vue-content-loader";
 export default {
   name: "CategoryHomeComponent",
 
+  props: ["categories"],
   components: {
     ContentLoader,
   },
@@ -65,15 +58,15 @@ export default {
   setup() {
     const store = useStore();
 
-    onMounted(() => {
-      store.dispatch("category/getCategoryHome");
-    });
+    // onMounted(() => {
+    //   store.dispatch("category/getCategoryHome");
+    // });
 
-    const categories = computed(() => {
-      return store.state.category.categories;
-    });
+    // const categories = computed(() => {
+    //   return store.state.category.categories;
+    // });
 
-    return {};
+    // return { categories };
   },
 };
 </script>

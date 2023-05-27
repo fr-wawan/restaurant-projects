@@ -1,7 +1,6 @@
 <template>
   <div class="h-screen">
     <Header />
-
     <router-view></router-view>
   </div>
 </template>

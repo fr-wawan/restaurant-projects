@@ -18,6 +18,10 @@ class Food extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    public function cart()
+    {
+        return $this->hasMany(Cart::class);
+    }
 
     public function user()
     {

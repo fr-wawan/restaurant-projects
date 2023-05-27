@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\api\CartController;
 use App\Http\Controllers\api\LoginController;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,3 +42,7 @@ Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->
 Route::get('/transaction', [TransactionController::class, 'index'])->middleware('auth:api');
 Route::post('/transaction', [TransactionController::class, 'store'])->middleware('auth:api');
 Route::post('/transaction/notification', [TransactionController::class, 'notificationHandler']);
+
+Route::get('/cart', [CartController::class, 'index'])->middleware('auth:api');
+Route::post('/cart', [CartController::class, 'store'])->middleware('auth:api');
+Route::delete('/cart/{id}', [CartController::class, 'destroy'])->middleware('auth:api');
