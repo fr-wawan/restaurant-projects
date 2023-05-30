@@ -12,12 +12,12 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'invoice', 'food_id', 'costumer_id', 'total', 'description', 'status', 'snap_token'
+        'invoice', 'food_id', 'costumer_id', 'amount', 'description', 'status', 'snap_token','phone','pin_code','address','description'
     ];
 
     public function food()
     {
-        return $this->belongsToMany(Food::class);
+        return $this->belongsToMany(Food::class,'transaction_food')->withPivot('quantity');
     }
 
     public function costumer()

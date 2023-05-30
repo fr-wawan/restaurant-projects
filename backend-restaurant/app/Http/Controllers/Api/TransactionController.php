@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Costumer;
 use App\Models\Food;
 use Midtrans\Snap;
 
@@ -36,6 +37,14 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         DB::transaction(function () use ($request) {
+
+            $this->validate($request, [
+                'phone' => 'required |numeric',
+                'pin_code' => 'required|numeric',
+                'address' => 'required',
+                'description' => 'required',
+            ]);
+
             $length = 10;
             $random = '';
             for ($i = 0; $i < $length; $i++) {
@@ -43,16 +52,14 @@ class TransactionController extends Controller
             }
 
             $no_invoice = 'TRX-' . Str::upper($random);
+            $name = 'dsjgsg';
 
-            $food = Food::where('slug', $request->foodSlug)->first();
 
             $paymentMethod = $request->payment_method;
 
             if ($paymentMethod == 'cod') {
                 $transaction = Transaction::create([
                     'invoice' => $no_invoice,
-                    'food_id' => $food->id,
-                    'name' => $request->name,
                     'phone' => $request->phone,
                     'pin_code' => $request->pin_code,
                     'address' => $request->address,
@@ -63,6 +70,17 @@ class TransactionController extends Controller
                     'status' => 'pending'
                 ]);
 
+                $costumer = Costumer::find(auth()->guard('api')->user()->id);
+                $costumer->cart()->delete();
+                $quantities = $request->input('quantity');
+                $foodIds = $request->input('foodIds');
+
+                foreach ($foodIds as $index => $foodId) {
+                    $quantity = $quantities[$index];
+                    $transaction->food()->attach($foodId, ['quantity' => $quantity]);
+                }
+
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Transaksi Berhasil Dibuat',
@@ -72,8 +90,6 @@ class TransactionController extends Controller
 
                 $transaction = Transaction::create([
                     'invoice' => $no_invoice,
-                    'food_id' => $food->id,
-                    'name' => $request->name,
                     'phone' => $request->phone,
                     'pin_code' => $request->pin_code,
                     'address' => $request->address,

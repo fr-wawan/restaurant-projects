@@ -10,6 +10,11 @@ const mixins = {
       div.innerHTML = html;
       return div.textContent;
     },
+
+    countTotal(quantity, price) {
+      let total = quantity * price;
+      return this.formatPrice(total);
+    },
   },
 };
 

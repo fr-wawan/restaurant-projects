@@ -77,6 +77,22 @@ const order = {
           console.log(error);
         });
     },
+    storeOrder({ commit }, formData) {
+      return new Promise((resolve, reject) => {
+        const token = localStorage.getItem("token");
+        Api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+        Api.post("/transaction", formData)
+          .then((response) => {
+            commit("SET_ORDERS", response.data.data);
+
+            resolve(response);
+          })
+          .catch((error) => {
+            reject(error.response.data);
+          });
+      });
+    },
   },
 
   //getters

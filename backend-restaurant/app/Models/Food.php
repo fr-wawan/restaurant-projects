@@ -30,13 +30,10 @@ class Food extends Model
 
     public function transaction()
     {
-        return $this->belongsToMany(Transaction::class);
+        return $this->belongsToMany(Transaction::class,'transaction_food');
     }
 
-    public function sumTransaction()
-    {
-        return $this->hasMany(Transaction::class)->selectRaw('transactions.food_id,SUM(transactions.amount) as total')->where('transactions.status', 'pending')->groupBy('transactions.food_id');
-    }
+
 
     protected function image(): Attribute
     {
