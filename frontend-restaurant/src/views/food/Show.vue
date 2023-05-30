@@ -49,7 +49,6 @@
 <script>
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import { ref, onMounted, computed } from "vue";
 export default {
@@ -58,7 +57,6 @@ export default {
   setup() {
     const store = useStore();
     const route = useRoute();
-    const router = useRouter();
     const toast = useToast();
 
     const quantity = ref(1);
@@ -76,8 +74,6 @@ export default {
       store
         .dispatch("cart/storeCart", formData)
         .then(() => {
-          router.push({ name: "cart" });
-
           toast.success("Added to Cart Successfully");
         })
         .catch((error) => {

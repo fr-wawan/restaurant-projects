@@ -13,12 +13,10 @@ class CartController extends Controller
     {
         $carts = Cart::with('food')->where('costumer_id', auth()->guard('api')->user()->id)->get();
 
-
-
         return response()->json([
             'success' => true,
             'message' => 'List Data Carts : ' . auth()->guard('api')->user()->id,
-            'data' => $carts
+            'data' => $carts,
         ], 200);
     }
 
@@ -50,11 +48,20 @@ class CartController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data successfully deleted',
-            'data' => null
+            'data' => $cart
         ], 200);
     }
 
-    public function destroyAll()
+    public function update(Request $request, $id)
     {
+        $cart = Cart::findOrFail($id);
+        $cart->quantity = $request->input('quantity');
+        $cart->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Quantity updated',
+            'data' => $cart
+        ]);
     }
 }

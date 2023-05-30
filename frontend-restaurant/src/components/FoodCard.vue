@@ -51,9 +51,7 @@
           </div>
         </div>
         <div>
-          <router-link
-            :to="{ name: 'food.index', params: { slug: food.slug } }"
-          >
+          <router-link :to="{ name: 'food.show', params: { slug: food.slug } }">
             <button
               class="border border-gray-700 transition-all hover:bg-gray-700 hover:text-white p-3 text-md uppercase font-semibold px-10 rounded-lg"
             >
@@ -76,7 +74,6 @@ import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { ContentLoader } from "vue-content-loader";
 import { useToast } from "vue-toastification";
-import { useRouter } from "vue-router";
 export default {
   name: "FoodHomeComponent",
 
@@ -91,11 +88,9 @@ export default {
 
     const quantity = ref(1);
     const toast = useToast();
-    const router = useRouter();
 
     onMounted(() => {
       store.dispatch("food/getFood");
-      // store.dispatch("category/getCategoryHome");
     });
 
     function addToCart(food) {
@@ -107,8 +102,6 @@ export default {
       store
         .dispatch("cart/storeCart", formData)
         .then(() => {
-          router.push({ name: "cart" });
-
           toast.success("Added to Cart Successfully");
         })
         .catch((error) => {

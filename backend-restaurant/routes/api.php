@@ -45,4 +45,6 @@ Route::post('/transaction/notification', [TransactionController::class, 'notific
 
 Route::get('/cart', [CartController::class, 'index'])->middleware('auth:api');
 Route::post('/cart', [CartController::class, 'store'])->middleware('auth:api');
+Route::put('/cart/{id}', [CartController::class, 'update'])->middleware('auth:api');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->middleware('auth:api');
+Route::delete('/cart', [CartController::class, 'destroyAll'])->middleware('auth:api');

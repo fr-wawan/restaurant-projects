@@ -14,6 +14,11 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->string('invoice');
+            $table->string('name');
+            $table->string('phone');
+            $table->string('pin_code');
+            $table->text('address');
+            $table->enum('payment_method', array('cod', 'midtrans'));
             $table->unsignedInteger('food_id');
             $table->unsignedInteger('costumer_id');
             $table->bigInteger('amount');

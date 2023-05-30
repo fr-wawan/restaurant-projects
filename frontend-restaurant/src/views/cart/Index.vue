@@ -5,7 +5,10 @@
     </h1>
     <div class="" v-if="carts?.length > 0">
       <div class="bg-white rounded-lg shadow-lg">
-        <div v-for="cart in carts" class="flex justify-between text-lg p-2">
+        <div
+          v-for="cart in carts"
+          class="flex items-center justify-between text-lg p-2 mx-5"
+        >
           <img
             :src="`//localhost:8000${cart.food.image}`"
             class="rounded-md mb-2 p-4 w-36"
@@ -16,7 +19,7 @@
           <div class="flex items-center border border-gray-200 rounded h-10">
             <button
               type="button"
-              @click="cart.quantity--"
+              @click="decrementQuantity(cart)"
               class="w-10 h-10 leading-10 text-gray-600 transition hover:opacity-75"
               :disabled="cart.quantity == 1"
             >
@@ -28,19 +31,20 @@
               id="Quantity"
               class="h-10 w-16 border border-gray-200 text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
               v-model="cart.quantity"
+              @input="updateCart(cart)"
             />
 
             <button
               type="button"
               class="w-10 h-10 leading-10 text-gray-600 transition hover:opacity-75"
-              @click="cart.quantity++"
+              @click="incrementQuantity(cart)"
             >
               &plus;
             </button>
           </div>
           <button
             class="bg-red-500 text-white p-3 px-5 rounded-md hover:bg-red-400 flex items-center text-base gap-2"
-            @click.prevent="deleteCart(cart.id)"
+            @click.prevent="deleteCart(cart)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -63,6 +67,36 @@
             </svg>
             Remove
           </button>
+        </div>
+        <div class="text-end text-lg mr-6 pb-5">
+          <p>Total Price : {{ formatPrice(total) }}</p>
+          <router-link :to="{ name: 'checkout' }">
+            <button
+              class="group border border-blue-800 text-blue-800 hover:text-white transition-all p-3 px-5 rounded-md hover:bg-blue-800 gap-2 mt-5"
+            >
+              <div class="flex gap-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon icon-tabler icon-tabler-shopping-cart stroke-blue-500 group-hover:stroke-white"
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="#000000"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                  <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                  <path d="M17 17h-11v-14h-2" />
+                  <path d="M6 5l14 1l-1 7h-13" />
+                </svg>
+                Checkout
+              </div>
+            </button>
+          </router-link>
         </div>
       </div>
     </div>
@@ -94,25 +128,62 @@ export default {
       store.dispatch("cart/getCart");
     });
 
+    const updateCart = async (cart) => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        const response = await store.dispatch("cart/updateCart", cart);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    let timeoutId;
+
+    async function updateCartWithDelay(cart) {
+      clearTimeout(timeoutId);
+      await new Promise((resolve) => {
+        timeoutId = setTimeout(resolve, 500);
+      });
+
+      await updateCart(cart);
+    }
+
+    function decrementQuantity(cart) {
+      if (cart.quantity > 1) {
+        cart.quantity--;
+        updateCartWithDelay(cart);
+      }
+    }
+
+    function incrementQuantity(cart) {
+      cart.quantity++;
+      updateCartWithDelay(cart);
+    }
+
     const carts = computed(() => {
       return store.state.cart.cart;
     });
 
-    function deleteCart(cart) {
-      store
-        .dispatch("cart/deleteCart", cart)
-        .then(() => {
-          store.dispatch("cart/getCart");
-          toast.success("Cart Deleted Successfully");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+    const total = computed(() => {
+      return store.getters["cart/cartTotal"];
+    });
+
+    const deleteCart = async (cart) => {
+      try {
+        await store.dispatch("cart/deleteCart", cart);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
     return {
       carts,
       deleteCart,
+      total,
+      incrementQuantity,
+      decrementQuantity,
+      updateCart,
     };
   },
 };

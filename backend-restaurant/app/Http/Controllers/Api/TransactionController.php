@@ -46,40 +46,70 @@ class TransactionController extends Controller
 
             $food = Food::where('slug', $request->foodSlug)->first();
 
-            $transaction = Transaction::create([
-                'invoice' => $no_invoice,
-                'food_id' => $food->id,
-                'costumer_id' => auth()->guard('api')->user()->id,
-                'amount' => $request->amount,
-                'description' => $request->description,
-                'status' => 'pending'
-            ]);
+            $paymentMethod = $request->payment_method;
 
-            $amountTotal = Transaction::where('status', 'pending')->sum('amount');
+            if ($paymentMethod == 'cod') {
+                $transaction = Transaction::create([
+                    'invoice' => $no_invoice,
+                    'food_id' => $food->id,
+                    'name' => $request->name,
+                    'phone' => $request->phone,
+                    'pin_code' => $request->pin_code,
+                    'address' => $request->address,
+                    'costumer_id' => auth()->guard('api')->user()->id,
+                    'amount' => $request->amount,
+                    'description' => $request->description,
+                    'payment_method' => 'cod',
+                    'status' => 'pending'
+                ]);
 
-            $payload = [
-                'transaction_details' => [
-                    'order_id' => $transaction->invoice,
-                    'gross_amount' => $amountTotal
-                ],
-                'costumer_details' => [
-                    'first_name' => auth()->guard('api')->user()->name,
-                    'email' => auth()->guard('api')->user()->email,
-                ]
-            ];
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Transaksi Berhasil Dibuat',
+                    'data' => $transaction
+                ]);
+            } else {
 
-            $snapToken = Snap::getSnapToken($payload);
-            $transaction->snap_token = $snapToken;
-            $transaction->save();
+                $transaction = Transaction::create([
+                    'invoice' => $no_invoice,
+                    'food_id' => $food->id,
+                    'name' => $request->name,
+                    'phone' => $request->phone,
+                    'pin_code' => $request->pin_code,
+                    'address' => $request->address,
+                    'costumer_id' => auth()->guard('api')->user()->id,
+                    'amount' => $request->amount,
+                    'description' => $request->description,
+                    'payment_method' => 'midtrans',
+                    'status' => 'pending'
+                ]);
 
-            $this->response['snap_token'] = $snapToken;
+                $amountTotal = Transaction::where('status', 'pending')->sum('amount');
+
+                $payload = [
+                    'transaction_details' => [
+                        'order_id' => $transaction->invoice,
+                        'gross_amount' => $amountTotal
+                    ],
+                    'costumer_details' => [
+                        'first_name' => auth()->guard('api')->user()->name,
+                        'email' => auth()->guard('api')->user()->email,
+                    ]
+                ];
+
+                $snapToken = Snap::getSnapToken($payload);
+                $transaction->snap_token = $snapToken;
+                $transaction->save();
+
+                $this->response['snap_token'] = $snapToken;
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Transaksi Berhasil Dibuat!',
+                    $this->response
+                ]);
+            }
         });
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Transaksi Berhasil Dibuat!',
-            $this->response
-        ]);
     }
 
     public function notificationHandler(Request $request)

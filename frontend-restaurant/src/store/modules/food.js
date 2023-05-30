@@ -6,7 +6,9 @@ const food = {
 
   //state
   state: {
-    food: [],
+    foods: [],
+
+    food: {},
 
     nextExists: false,
     nextPage: 0,
@@ -15,6 +17,10 @@ const food = {
   //mutations
   mutations: {
     SET_FOOD(state, food) {
+      state.foods = food;
+    },
+
+    DETAIL_FOOD(state, food) {
       state.food = food;
     },
 
@@ -48,7 +54,7 @@ const food = {
     detailsFood({ commit }, slug) {
       Api.get(`/food/${slug}`)
         .then((response) => {
-          commit("SET_FOOD", response.data.data);
+          commit("DETAIL_FOOD", response.data.data);
         })
         .catch((error) => {
           console.log(error);

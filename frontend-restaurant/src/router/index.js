@@ -14,6 +14,11 @@ const routes = [
     component: () => import("../views/auth/Login.vue"),
   },
   {
+    path: "/",
+    name: "home.index",
+    component: () => import("../views/home/Index.vue"),
+  },
+  {
     path: "/dashboard",
     name: "dashboard",
     component: () => import("../views/dashboard/Index.vue"),
@@ -39,12 +44,8 @@ const routes = [
   },
   {
     path: "/food/:slug",
-    name: "food.index",
+    name: "food.show",
     component: () => import("../views/food/Show.vue"),
-    meta: {
-      requiresAuth: true,
-    },
-    props: true,
   },
   {
     path: "/profile/password",
@@ -64,15 +65,19 @@ const routes = [
     name: "category.show",
     component: () => import("../views/category/Show.vue"),
   },
-  {
-    path: "/",
-    name: "home.index",
-    component: () => import("../views/home/Index.vue"),
-  },
+
   {
     path: "/cart",
     name: "cart",
     component: () => import("../views/cart/Index.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/checkout",
+    name: "checkout",
+    component: () => import("../views/checkout/Index.vue"),
     meta: {
       requiresAuth: true,
     },
