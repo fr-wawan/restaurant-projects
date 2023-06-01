@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->string('invoice');
+            $table->string('name');
             $table->string('phone');
             $table->string('pin_code');
             $table->text('address');
@@ -21,7 +22,7 @@ return new class extends Migration
             $table->unsignedInteger('costumer_id');
             $table->bigInteger('amount');
             $table->timestamp("order_placed_at")->useCurrent();
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('snap_token')->nullable();
             $table->enum('status', array('pending', 'success', 'expired', 'failed'));
             $table->timestamps();

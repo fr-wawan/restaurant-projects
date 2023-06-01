@@ -52,7 +52,11 @@
               <path d="M6 5l14 1l-1 7h-13"></path>
             </svg>
           </router-link>
-          <div class="flex items-center">
+          <div
+            class="flex items-center"
+            @click="toggleDropDown"
+            v-click-outside-element="closeDropDown"
+          >
             <img
               :src="
                 profile?.avatar?.includes('storage')
@@ -60,10 +64,8 @@
                   : profile.avatar
               "
               class="rounded-full w-9 cursor-pointer object-cover"
-              @click="toggleDropDown"
             />
             <svg
-              @click="toggleDropDown"
               xmlns="http://www.w3.org/2000/svg"
               class="icon icon-tabler icon-tabler-chevron-down cursor-pointer"
               width="24"
@@ -84,10 +86,10 @@
             >
               <ul class="py-2 text-sm text-gray-700">
                 <li>
-                  <a
-                    @click="navigateHome"
+                  <router-link
+                    :to="{ name: 'orders' }"
                     class="block px-4 py-2 hover:bg-gray-200"
-                    >My Orders</a
+                    >My Orders</router-link
                   >
                 </li>
                 <li>
@@ -134,20 +136,20 @@ export default {
     const toast = useToast();
     const router = useRouter();
 
-    const navigateHome = () => {
-      router.push({ name: "home.index" });
-    };
-
     function toggleDropDown() {
       isDropDown.value = !isDropDown.value;
     }
 
+    function closeDropDown() {
+      isDropDown.value = false;
+    }
+
     onMounted(() => {
-      store.dispatch("profile/getProfile");
+      store.dispatch("auth/getUser");
     });
 
     const profile = computed(() => {
-      return store.state.profile.profile;
+      return store.state.auth.profile;
     });
 
     function logout() {
@@ -165,7 +167,7 @@ export default {
       toggleDropDown,
       logout,
       profile,
-      navigateHome,
+      closeDropDown,
     };
   },
 };

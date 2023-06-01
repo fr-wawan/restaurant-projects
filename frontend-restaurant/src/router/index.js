@@ -35,6 +35,14 @@ const routes = [
     },
   },
   {
+    path: "/orders/:invoice",
+    name: "orders.show",
+    component: () => import("../views/orders/Show.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: "/profile",
     name: "profile",
     component: () => import("../views/profile/Index.vue"),

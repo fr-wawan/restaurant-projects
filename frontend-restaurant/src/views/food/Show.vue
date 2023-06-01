@@ -1,7 +1,10 @@
 <template>
   <div class="w-5/12 mx-auto gap-20 rounded-md p-5 flex bg-white mt-10">
-    <div class="box box1 w-6/12">
-      <img :src="`//localhost:8000${food.image}`" class="rounded-lg mb-2" />
+    <div class="w-full h-full object-cover">
+      <img
+        :src="`//localhost:8000${food.image}`"
+        class="rounded-lg mb-2 w-full"
+      />
     </div>
     <div>
       <h1 class="text-3xl uppercase font-bold">{{ food.title }}</h1>

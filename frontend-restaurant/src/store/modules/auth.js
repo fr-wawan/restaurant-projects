@@ -25,6 +25,7 @@ const auth = {
     AUTH_LOGOUT(state) {
       state.token = "";
       state.user = {};
+      state.profile = {};
     },
 
     SET_USER(state, profile) {

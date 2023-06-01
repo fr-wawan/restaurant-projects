@@ -39,10 +39,10 @@ class TransactionController extends Controller
         DB::transaction(function () use ($request) {
 
             $this->validate($request, [
+                'name' => 'required',
                 'phone' => 'required |numeric',
                 'pin_code' => 'required|numeric',
                 'address' => 'required',
-                'description' => 'required',
             ]);
 
             $length = 10;
@@ -60,6 +60,7 @@ class TransactionController extends Controller
             if ($paymentMethod == 'cod') {
                 $transaction = Transaction::create([
                     'invoice' => $no_invoice,
+                    'name' => $request->name,
                     'phone' => $request->phone,
                     'pin_code' => $request->pin_code,
                     'address' => $request->address,
@@ -90,6 +91,7 @@ class TransactionController extends Controller
 
                 $transaction = Transaction::create([
                     'invoice' => $no_invoice,
+                    'name' => $request->name,
                     'phone' => $request->phone,
                     'pin_code' => $request->pin_code,
                     'address' => $request->address,
@@ -179,5 +181,23 @@ class TransactionController extends Controller
                 'status' => 'failed'
             ]);
         }
+    }
+
+    public function show($invoice)
+    {
+        $transaction = Transaction::with('user')->where('invoice', $invoice)->first();
+
+        if ($transaction) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Detail Data Transaksi : ' . $transaction->invoice,
+                'data' => $transaction
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => "Data Transaksi Tidak Ditemukan"
+        ], 404);
     }
 }

@@ -1,114 +1,114 @@
 <template>
-  <form @submit.prevent="submitTransaction('cod')">
-    <div class="container mx-auto mt-10 bg-white p-10 rounded-lg shadowmd">
-      <div class="flex gap-10">
+  <div class="container mx-auto mt-10 bg-white p-10 rounded-lg shadowmd">
+    <div class="flex gap-10">
+      <div>
         <div>
+          <label for="name">Name : </label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            v-model="data.name"
+            class="block border border-gray-500 placeholder:text-sm rounded p-2 w-full mt-3"
+            placeholder="Name..."
+          />
+        </div>
+        <div class="flex gap-5 mt-5">
           <div>
-            <!-- <label for="name">Name : </label>
+            <label for="phone">Phone : </label>
             <input
               type="text"
-              name="name"
-              id="name"
-              v-model="data.name"
-              class="block border border-gray-500 placeholder:text-sm rounded p-2 w-full mt-3"
-              placeholder="Name..."
-            /> -->
-            {{ data }}
-          </div>
-          <div class="flex gap-5 mt-5">
-            <div>
-              <label for="phone">Phone : </label>
-              <input
-                type="text"
-                name="phone"
-                v-model="data.phone"
-                id="phone"
-                class="block border border-gray-500 placeholder:text-sm rounded mt-3 p-2 w-96"
-                placeholder="Phone Number..."
-              />
-            </div>
-            <div>
-              <label for="phone">Pin Code : </label>
-              <input
-                type="text"
-                name="phone"
-                id="phone"
-                v-model="data.pinCode"
-                class="block border border-gray-500 placeholder:text-sm rounded mt-3 p-2 w-96"
-                placeholder="Pin Code..."
-              />
-            </div>
-          </div>
-          <div class="mt-5">
-            <label for="address">Address : </label>
-            <textarea
-              name="address"
-              id="address"
-              v-model="data.address"
-              cols="91"
-              rows="8"
-              class="border border-gray-500 block mt-3 rounded-md p-5"
-              placeholder="Address..."
-            ></textarea>
-          </div>
-          <div class="mt-5">
-            <label for="message">User Message : </label>
-            <textarea
-              name="message"
-              id="message"
-              cols="91"
-              v-model="data.description"
-              rows="8"
-              class="border border-gray-500 block mt-3 rounded-md p-5"
-              placeholder="User Message..."
-            ></textarea>
-            <input type="text" v-model="data.amount" />
-          </div>
-        </div>
-        <div>
-          <table>
-            <tr>
-              <th class="p-4 border-b border-black">Image</th>
-              <th class="p-4 border-b border-black">Food Title</th>
-              <th class="p-4 border-b border-black">Price</th>
-              <th class="p-4 border-b border-black">Quantity</th>
-              <th class="p-4 border-b border-black">Total</th>
-            </tr>
-            <tr v-for="cart in carts" class="mx-5">
-              <td class="text-center mx-5">
-                <img
-                  :src="`//localhost:8000${cart.food.image}`"
-                  class="inline text-center"
-                  width="100"
-                  alt=""
-                />
-              </td>
-              <td class="p-10">{{ cart.food.title }}</td>
-              <td class="p-5">
-                {{ formatPrice(cart.food.price) }}
-              </td>
-              <td class="px-3 text-center">{{ cart.quantity }}</td>
-              <td class="p-5">
-                {{ countTotal(cart.quantity, cart.food.price) }}
-              </td>
-            </tr>
-          </table>
-          <div class="flex justify-between mt-5 text-lg">
-            <p>Grand Total :</p>
-            <p>{{ formatPrice(total) }}</p>
+              name="phone"
+              v-model="data.phone"
+              id="phone"
+              class="block border border-gray-500 placeholder:text-sm rounded mt-3 p-2 w-96"
+              placeholder="Phone Number..."
+            />
           </div>
           <div>
-            <button class="p-3 bg-blue-700 w-full mt-5 text-white rounded">
-              Place Order | COD
-            </button>
-            <button class="p-3 bg-red-500 w-full mt-5 text-white rounded">
-              Pay With MIDTRANS
-            </button>
+            <label for="phone">Pin Code : </label>
+            <input
+              type="text"
+              name="phone"
+              id="phone"
+              v-model="data.pinCode"
+              class="block border border-gray-500 placeholder:text-sm rounded mt-3 p-2 w-96"
+              placeholder="Pin Code..."
+            />
           </div>
+        </div>
+        <div class="mt-5">
+          <label for="address">Address : </label>
+          <textarea
+            name="address"
+            id="address"
+            v-model="data.address"
+            cols="91"
+            rows="8"
+            class="border border-gray-500 block mt-3 rounded-md p-5"
+            placeholder="Address..."
+          ></textarea>
+        </div>
+        <div class="mt-5">
+          <label for="message">User Message : </label>
+          <textarea
+            name="message"
+            id="message"
+            cols="91"
+            v-model="data.description"
+            rows="8"
+            class="border border-gray-500 block mt-3 rounded-md p-5"
+            placeholder="User Message..."
+          ></textarea>
+          <input type="text" v-model="data.amount" />
+        </div>
+      </div>
+      <div>
+        <table>
+          <tr>
+            <th class="p-4 border-b border-black">Image</th>
+            <th class="p-4 border-b border-black">Food Title</th>
+            <th class="p-4 border-b border-black">Price</th>
+            <th class="p-4 border-b border-black">Quantity</th>
+            <th class="p-4 border-b border-black">Total</th>
+          </tr>
+          <tr v-for="cart in carts" class="mx-5">
+            <td class="text-center mx-5">
+              <img
+                :src="`//localhost:8000${cart.food.image}`"
+                class="inline text-center"
+                width="100"
+                alt=""
+              />
+            </td>
+            <td class="p-10">{{ cart.food.title }}</td>
+            <td class="p-5">
+              {{ formatPrice(cart.food.price) }}
+            </td>
+            <td class="px-3 text-center">{{ cart.quantity }}</td>
+            <td class="p-5">
+              {{ countTotal(cart.quantity, cart.food.price) }}
+            </td>
+          </tr>
+        </table>
+        <div class="flex justify-between mt-5 text-lg">
+          <p>Grand Total :</p>
+          <p>{{ formatPrice(total) }}</p>
+        </div>
+        <div>
+          <button
+            class="p-3 bg-blue-700 w-full mt-5 text-white rounded"
+            @click.prevent="submitTransaction('cod')"
+          >
+            Place Order | COD
+          </button>
+          <button class="p-3 bg-red-500 w-full mt-5 text-white rounded">
+            Pay With MIDTRANS
+          </button>
         </div>
       </div>
     </div>
-  </form>
+  </div>
 </template>
 
 <script>
@@ -146,6 +146,7 @@ export default {
 
     let method = ref("");
     const data = reactive({
+      name: "",
       phone: "",
       pinCode: "",
       address: "",
@@ -155,11 +156,9 @@ export default {
     function submitTransaction(methods, food) {
       method = methods;
       let paymentMethod = method;
-      const cartIds = mappedCarts.value.map((cart) => cart.id);
-
-      const cartQuantity = mappedCarts.value.map((cart) => cart.quantity);
 
       let formData = new FormData();
+      formData.append("name", data.name);
       formData.append("phone", data.phone);
       formData.append("pin_code", data.pinCode);
       formData.append("address", data.address);
@@ -168,10 +167,11 @@ export default {
       mappedCarts.value.forEach((cart) => {
         formData.append("foodIds[]", cart.id);
         formData.append("quantity[]", cart.quantity);
-        // Append other data fields specific to each data entry if needed
       });
       formData.append("amount", total.value);
       console.log(data.amount);
+      console.log(data.name);
+
       if (method == "cod") {
         store
           .dispatch("order/storeOrder", formData)

@@ -5,37 +5,37 @@
     </h1>
     <div>
       <div v-if="orders.length > 0">
-        <div class="bg-white p-3 mt-5 rounded-md">
-          <div class="flex justify-between">
-            <h1>Tracking No</h1>
-            <h1>Price</h1>
-            <h1>Order Placed At</h1>
-            <h1>Status</h1>
-            <h1>Action</h1>
-          </div>
-          <div class="flex justify-between">
-            <p>tes</p>
-            <p>tes</p>
-            <p>tes</p>
-            <p>tes</p>
-            <p>tes</p>
-          </div>
-        </div>
-        <div class="bg-white p-3 rounded-md mt-3">
-          <div class="flex justify-between">
-            <h1>Tracking No</h1>
-            <h1>Price</h1>
-            <h1>Order Placed At</h1>
-            <h1>Status</h1>
-            <h1>Action</h1>
-          </div>
-          <div class="flex justify-between">
-            <p>tes</p>
-            <p>tes</p>
-            <p>tes</p>
-            <p>tes</p>
-            <p>tes</p>
-          </div>
+        <div class="bg-white p-4 mt-5 rounded-md" v-for="order in orders">
+          <table class="w-full text-center">
+            <tr>
+              <th class="text-left">Tracking No</th>
+              <th>Price</th>
+              <th>Order Placed At</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+            <tr class="h-3"></tr>
+            <tr>
+              <td class="text-left">{{ order.invoice }}</td>
+              <td>Rp. {{ formatPrice(order.amount) }}</td>
+              <td>{{ order.order_placed_at }}</td>
+              <td v-if="order.status == 'pending'" class="flex justify-center">
+                <p class="p-1 px-3 text-sm text-white rounded-md bg-yellow-500">
+                  In Progress
+                </p>
+              </td>
+              <td>
+                <router-link
+                  :to="{
+                    name: 'orders.show',
+                    params: { invoice: order.invoice },
+                  }"
+                  class="bg-blue-500 p-2 px-5 text-white rounded-md"
+                  >Details</router-link
+                >
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
       <div v-else class="bg-gray-200 rounded-md p-10 shadow-md mt-5">

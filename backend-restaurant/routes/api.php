@@ -41,6 +41,7 @@ Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->
 
 Route::get('/transaction', [TransactionController::class, 'index'])->middleware('auth:api');
 Route::post('/transaction', [TransactionController::class, 'store'])->middleware('auth:api');
+Route::get('/transaction/{invoice}', [TransactionController::class, 'store'])->middleware('auth:api');
 Route::post('/transaction/notification', [TransactionController::class, 'notificationHandler']);
 
 Route::get('/cart', [CartController::class, 'index'])->middleware('auth:api');

@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
+import vueClickOutsideElement from "vue-click-outside-element";
 
 /**
  * import Toastr
@@ -27,5 +28,7 @@ app.mixin(mixins);
 app.use(router);
 
 app.use(store);
+
+app.use(vueClickOutsideElement);
 
 app.mount("#app");
