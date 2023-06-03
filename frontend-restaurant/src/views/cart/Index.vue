@@ -171,7 +171,9 @@ export default {
 
     const deleteCart = async (cart) => {
       try {
-        await store.dispatch("cart/deleteCart", cart);
+        await store.dispatch("cart/deleteCart", cart).then(() => {
+          toast.success("Successfully remove Item from Cart");
+        });
       } catch (error) {
         console.error(error);
       }

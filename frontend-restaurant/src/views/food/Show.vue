@@ -1,5 +1,5 @@
 <template>
-  <div class="w-5/12 mx-auto gap-20 rounded-md p-5 flex bg-white mt-10">
+  <div class="md:w-5/12 mx-auto gap-20 rounded-md p-5 flex bg-white mt-10">
     <div class="w-full h-full object-cover">
       <img
         :src="`//localhost:8000${food.image}`"

@@ -90,6 +90,11 @@ const routes = [
       requiresAuth: true,
     },
   },
+  {
+    path: "/search",
+    name: "search",
+    component: () => import("../views/search/Index.vue"),
+  },
 ];
 
 const router = createRouter({

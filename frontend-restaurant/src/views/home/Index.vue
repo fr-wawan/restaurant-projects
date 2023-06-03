@@ -1,8 +1,8 @@
 <template>
-  <div class="">
+  <div>
     <HeroIndex />
 
-    <div class="mt-10 container mx-auto">
+    <div class="my-10 container mx-auto">
       <h1 class="text-3xl font-bold uppercase">
         Menu <span class="text-red-500">Lists</span>
       </h1>
@@ -14,6 +14,14 @@
           Food <span class="text-red-500">Lists</span>
         </h1>
         <FoodCard :foods="foods" />
+
+        <div class="mt-10" v-show="nextExists">
+          <a
+            @click="loadMore"
+            class="bg-red-600 text-white p-2 px-3 rounded-md shadow-md cursor-pointer"
+            >LIHAT SEMUA <i class="fa fa-long-arrow-alt-right"></i
+          ></a>
+        </div>
       </div>
     </div>
   </div>
@@ -47,11 +55,23 @@ export default {
       return store.state.food.foods;
     });
 
+    const nextExists = computed(() => {
+      return store.state.food.nextExists;
+    });
+
+    const nextPage = computed(() => {
+      return store.state.food.nextPage;
+    });
+
     const categories = computed(() => {
       return store.state.category.categories;
     });
 
-    return { categories, foods };
+    function loadMore() {
+      store.dispatch("food/getLoadMore", nextPage.value);
+    }
+
+    return { categories, foods, nextExists, nextPage, loadMore };
   },
 };
 </script>

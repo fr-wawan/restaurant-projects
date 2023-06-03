@@ -114,12 +114,18 @@ export default {
 
           if (validation.value.name) {
             toast.error(`${validation.value.name[0]}`);
+            user.password = "";
+            user.password_confirmation = "";
           }
           if (validation.value.email) {
             toast.error(`${validation.value.email[0]}`);
+            user.password = "";
+            user.password_confirmation = "";
           }
           if (validation.value.password) {
             toast.error(`${validation.value.password[0]}`);
+            user.password = "";
+            user.password_confirmation = "";
           }
         });
     }

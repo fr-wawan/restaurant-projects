@@ -5,10 +5,14 @@ const cart = {
 
   state: {
     cart: [],
+    count: {},
   },
   mutations: {
     SET_CART(state, data) {
       state.cart = data;
+    },
+    SET_COUNT(state, data) {
+      state.count = data;
     },
     UPDATE_CART(state, updatedCart) {
       const index = state.cart.findIndex((c) => c.id === updatedCart.id);
@@ -24,7 +28,7 @@ const cart = {
   },
 
   actions: {
-    storeCart({ commit }, formData) {
+    storeCart({ dispatch }, formData) {
       return new Promise((resolve, reject) => {
         const token = localStorage.getItem("token");
 
@@ -32,8 +36,7 @@ const cart = {
 
         Api.post("/cart", formData)
           .then((response) => {
-            commit("SET_CART", response.data.data);
-
+            dispatch("getCart");
             resolve(response);
           })
           .catch((error) => {
@@ -49,6 +52,7 @@ const cart = {
       Api.get("/cart")
         .then((response) => {
           commit("SET_CART", response.data.data);
+          commit("SET_COUNT", response.data.count);
         })
         .catch((error) => {
           console.log(error);

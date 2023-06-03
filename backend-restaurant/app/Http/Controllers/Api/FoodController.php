@@ -14,7 +14,7 @@ class FoodController extends Controller
     {
         $foods = Food::with('user')->when(request()->q, function ($foods) {
             $foods = $foods->where('title', 'like', '%' . request()->q . '%');
-        })->latest()->paginate(5);
+        })->latest()->paginate(4);
 
         return response()->json([
             'success' => true,

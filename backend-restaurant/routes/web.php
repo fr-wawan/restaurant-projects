@@ -26,7 +26,10 @@ Route::prefix('admin')->group(function () {
         Route::resource('/foods', FoodController::class, ['as' => 'admin'])->except(['show']);
         Route::get('/costumer', [CostumerController::class, 'index'])->name('admin.costumer.index');
         Route::get('/transaction', [TransactionController::class, 'index'])->name('admin.transaction.index');
+
         Route::get('/transaction/filter', [TransactionController::class, 'filter'])->name('admin.transaction.filter');
+        Route::get('/transaction/{invoice}', [TransactionController::class, 'show'])->name('admin.transaction.show');
+        Route::put('/transaction/{id}', [TransactionController::class, 'update'])->name('admin.transaction.update');
         Route::get('/profile', [ProfileController::class, 'index'])->name('admin.profile.index');
     });
 });

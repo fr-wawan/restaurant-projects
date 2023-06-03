@@ -86,14 +86,17 @@ export default {
 
           if (validation.value.email) {
             toast.error(`${validation.value.email[0]}`);
+            user.password = "";
           }
 
           if (validation.value.password) {
             toast.error(`${validation.value.password[0]}`);
+            user.password = "";
           }
 
           if (validation.value.message) {
             toast.error(`${validation.value.message}`);
+            user.password = "";
           }
         });
     }

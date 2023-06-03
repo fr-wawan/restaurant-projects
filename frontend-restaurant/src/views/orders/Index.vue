@@ -12,6 +12,14 @@
               <th>Price</th>
               <th>Order Placed At</th>
               <th>Status</th>
+              <th
+                v-if="
+                  order.payment_method == 'midtrans' &&
+                  order.status == 'pending'
+                "
+              >
+                Bayar
+              </th>
               <th>Actions</th>
             </tr>
             <tr class="h-3"></tr>
@@ -23,6 +31,24 @@
                 <p class="p-1 px-3 text-sm text-white rounded-md bg-yellow-500">
                   In Progress
                 </p>
+              </td>
+              <td v-if="order.status == 'success'" class="flex justify-center">
+                <p class="p-1 px-3 text-sm text-white rounded-md bg-green-500">
+                  Completed
+                </p>
+              </td>
+              <td
+                v-if="
+                  order.payment_method == 'midtrans' &&
+                  order.status == 'pending'
+                "
+              >
+                <button
+                  class="bg-green-500 p-2 px-5 text-sm text-white rounded-md"
+                  @click="payment(order.snap_token)"
+                >
+                  Bayar
+                </button>
               </td>
               <td>
                 <router-link
@@ -79,10 +105,25 @@ export default {
       store.dispatch("order/getLoadMore", nextPage.value);
     }
 
+    function payment(snap_token) {
+      window.snap.pay(snap_token, {
+        onSuccess: function () {
+          router.push({ name: "orders" });
+        },
+        onPending: function () {
+          router.push({ name: "orders" });
+        },
+        onError: function () {
+          router.push({ name: "orders" });
+        },
+      });
+    }
+
     return {
       orders,
       nextExists,
       nextPage,
+      payment,
       loadMore,
     };
   },

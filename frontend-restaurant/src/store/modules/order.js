@@ -7,6 +7,7 @@ const order = {
   //state
   state: {
     orders: [],
+    order: {},
     nextExists: false,
     nextPage: 0,
   },
@@ -15,6 +16,10 @@ const order = {
   mutations: {
     SET_ORDERS(state, orders) {
       state.orders = orders;
+    },
+
+    DETAIL_ORDER(state, order) {
+      state.order = order;
     },
 
     SET_NEXTEXISTS(state, nextExists) {
@@ -84,14 +89,21 @@ const order = {
 
         Api.post("/transaction", formData)
           .then((response) => {
-            commit("SET_ORDERS", response.data.data);
-
             resolve(response);
           })
           .catch((error) => {
             reject(error.response.data);
           });
       });
+    },
+    detailOrders({ commit }, invoice) {
+      Api.get(`/transaction/${invoice}`)
+        .then((response) => {
+          commit("DETAIL_ORDER", response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 

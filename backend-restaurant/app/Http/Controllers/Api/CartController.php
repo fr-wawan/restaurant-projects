@@ -13,10 +13,13 @@ class CartController extends Controller
     {
         $carts = Cart::with('food')->where('costumer_id', auth()->guard('api')->user()->id)->get();
 
+        $cartsCount = Cart::count();
+
         return response()->json([
             'success' => true,
             'message' => 'List Data Carts : ' . auth()->guard('api')->user()->id,
             'data' => $carts,
+            'count' => $cartsCount
         ], 200);
     }
 

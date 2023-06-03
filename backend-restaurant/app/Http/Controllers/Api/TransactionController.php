@@ -87,7 +87,7 @@ class TransactionController extends Controller
                     'message' => 'Transaksi Berhasil Dibuat',
                     'data' => $transaction
                 ]);
-            } else {
+            } elseif ($paymentMethod == 'midtrans') {
 
                 $transaction = Transaction::create([
                     'invoice' => $no_invoice,
@@ -99,15 +99,26 @@ class TransactionController extends Controller
                     'amount' => $request->amount,
                     'description' => $request->description,
                     'payment_method' => 'midtrans',
+
                     'status' => 'pending'
                 ]);
 
-                $amountTotal = Transaction::where('status', 'pending')->sum('amount');
+                $costumer = Costumer::find(auth()->guard('api')->user()->id);
+                $costumer->cart()->delete();
+                $quantities = $request->input('quantity');
+                $foodIds = $request->input('foodIds');
+
+                foreach ($foodIds as $index => $foodId) {
+                    $quantity = $quantities[$index];
+                    $transaction->food()->attach($foodId, ['quantity' => $quantity]);
+                }
+
+
 
                 $payload = [
                     'transaction_details' => [
                         'order_id' => $transaction->invoice,
-                        'gross_amount' => $amountTotal
+                        'gross_amount' => $transaction->amount,
                     ],
                     'costumer_details' => [
                         'first_name' => auth()->guard('api')->user()->name,
@@ -185,7 +196,7 @@ class TransactionController extends Controller
 
     public function show($invoice)
     {
-        $transaction = Transaction::with('user')->where('invoice', $invoice)->first();
+        $transaction = Transaction::with('food')->where('invoice', $invoice)->first();
 
         if ($transaction) {
             return response()->json([

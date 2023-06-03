@@ -12,7 +12,7 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'invoice', 'name', 'food_id', 'costumer_id', 'amount', 'description', 'status', 'snap_token', 'phone', 'pin_code', 'address', 'description'
+        'invoice', 'name', 'food_id', 'costumer_id', 'amount', 'description', 'status', 'snap_token', 'phone', 'pin_code', 'address', 'description', 'payment_method'
     ];
 
     public function food()

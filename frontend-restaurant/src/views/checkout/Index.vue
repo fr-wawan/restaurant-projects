@@ -102,7 +102,10 @@
           >
             Place Order | COD
           </button>
-          <button class="p-3 bg-red-500 w-full mt-5 text-white rounded">
+          <button
+            class="p-3 bg-red-500 w-full mt-5 text-white rounded"
+            @click.prevent="submitTransaction('midtrans')"
+          >
             Pay With MIDTRANS
           </button>
         </div>
@@ -169,19 +172,18 @@ export default {
         formData.append("quantity[]", cart.quantity);
       });
       formData.append("amount", total.value);
-      console.log(data.amount);
-      console.log(data.name);
 
-      if (method == "cod") {
-        store
-          .dispatch("order/storeOrder", formData)
-          .then(() => {
-            toast.success("Food in Proccess");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+      console.log(paymentMethod);
+      store
+        .dispatch("order/storeOrder", formData)
+        .then(() => {
+          router.push({ name: "orders" });
+
+          toast.success("Food in Proccess");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
 
     return {

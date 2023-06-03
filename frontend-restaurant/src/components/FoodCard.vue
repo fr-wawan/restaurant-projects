@@ -17,38 +17,6 @@
             {{ food.title }}
           </h1>
           <p class="text-base">Price : {{ formatPrice(food.price) }}</p>
-
-          <div class="w-40 text-lg my-3 mx-auto">
-            <label for="Quantity" class="sr-only"> Quantity </label>
-
-            <div class="flex items-center border border-gray-200 rounded">
-              <button
-                type="button"
-                :disabled="quantity == 1"
-                @click.prevent="quantity--"
-                class="w-10 h-10 leading-10 text-gray-600 transition hover:opacity-75"
-              >
-                &minus;
-              </button>
-
-              <input
-                type="number"
-                id="Quantity"
-                class="h-10 w-16 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
-                @click.prevent=""
-                v-model="quantity"
-                min="1"
-              />
-
-              <button
-                type="button"
-                class="w-10 h-10 leading-10 text-gray-600 transition hover:opacity-75"
-                @click.prevent="quantity++"
-              >
-                &plus;
-              </button>
-            </div>
-          </div>
         </div>
         <div>
           <router-link :to="{ name: 'food.show', params: { slug: food.slug } }">
@@ -70,10 +38,11 @@
 </template>
 
 <script>
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { ContentLoader } from "vue-content-loader";
 import { useToast } from "vue-toastification";
+import { useRouter } from "vue-router";
 export default {
   name: "FoodHomeComponent",
 
@@ -83,35 +52,38 @@ export default {
 
   props: ["foods"],
 
-  setup() {
+  setup(props) {
     const store = useStore();
+    const router = useRouter();
 
-    const quantity = ref(1);
     const toast = useToast();
 
     onMounted(() => {
       store.dispatch("food/getFood");
     });
 
+    const quantity = ref(1);
     function addToCart(food) {
-      let formData = new FormData();
+      if (store.getters["auth/isLoggedIn"]) {
+        let formData = new FormData();
 
-      formData.append("id", food.id);
-      formData.append("quantity", quantity.value);
+        formData.append("id", food.id);
+        formData.append("quantity", quantity.value);
 
-      store
-        .dispatch("cart/storeCart", formData)
-        .then(() => {
-          toast.success("Added to Cart Successfully");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        store
+          .dispatch("cart/storeCart", formData)
+          .then(() => {
+            toast.success("Added to Cart Successfully");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        router.push({ name: "login" });
+      }
     }
 
     return {
-      // foods,
-      quantity,
       addToCart,
     };
   },
